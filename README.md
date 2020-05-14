@@ -2,4 +2,4 @@ A custom node_exporter data in the prometheus client and show it on the dashboar
 
 single process cpu_percent and memory_percent
 
-run cli_install.sh
+run install_cli.sh
