@@ -1,0 +1,141 @@
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['xx.xx.xx.204:9090']
+    #- targets: ['127.0.0.1:9090']
+
+
+  - job_name: 'node'
+    static_configs:
+    - targets:
+        - xx.xx.xx.247:9100
+        - xx.xx.xx.248:9100
+        - xx.xx.xx.238:9100
+        - xx.xx.xx.239:9100
+        - xx.xx.xx.240:9100
+
+  - job_name: 'mongo'
+    static_configs:
+    - targets:
+        - xx.xx.xx.247:9216
+        - xx.xx.xx.248:9216
+
+  - job_name: 'mysql'
+    static_configs:
+    - targets:
+        - xx.xx.xx.247:9104
+        - xx.xx.xx.248:9104
+
+  - job_name: 'redis'
+    static_configs:
+    - targets:
+        - xx.xx.xx.247:9121
+    #    - xx.xx.xx.248:9121
+
+  - job_name: 'zookeeper'
+    static_configs:
+    - targets:
+        - xx.xx.xx.238:9141
+        - xx.xx.xx.239:9141
+        - xx.xx.xx.240:9141
+
+  - job_name: 'kafka'
+    static_configs:
+    - targets:
+        - xx.xx.xx.238:9308
+
+  - job_name: 'node_status'
+    metrics_path: /probe
+    params:
+      module: [icmp]
+    static_configs:
+      - targets: ['xx.xx.xx.248']
+        labels:
+          instance: 'node_status'
+          group: 'node'
+          job: 'job'
+          env: 'env'
+          service: 'service'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: xx.xx.xx.248:9115
+
+
+
+  - job_name: web_status
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets: ['https://www.google.com']
+        labels:
+          instance: user_status
+          domain: 'https://www.google.com'
+          group: 'web'
+          job: 'job'
+          env: 'google.com'
+          service: 'service'
+          port: '80'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: xx.xx.xx.248:9115
+
+  - job_name: 'prometheus_port_status'
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]
+    static_configs:
+      - targets: ['xx.xx.xx.209:8080']
+        labels:
+          instance: 'port_status'
+          domain: 'https://xx.xx.xx.209:8080'
+          group: 'tcp'
+          job: 'tcp'
+          env: 'xx'
+          service: 'by_service'
+          ip: 'xx.xx.xx.209'
+          port: '8080'
+      - targets: ['xx.xx.xx.209:80']
+        labels:
+          instance: 'port_status'
+          domain: 'https://xx.xx.xx.209:80'
+          group: 'tcp'
+          job: 'tcp'
+          env: 'xx'
+          service: 'by_service'
+          ip: 'xx.xx.xx.209'
+          port: '80'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: xx.xx.xx.248:9115
