@@ -1,1 +1,0 @@
-* * * * * /usr/bin/python2 /usr/local/node_exporter/key/ps.py > /usr/local/node_exporter/key/txt && cat /usr/local/node_exporter/key/txt > /usr/local/node_exporter/key/key.prom
