@@ -11,7 +11,7 @@ use admin
 db.createUser(
   {
     user: "mongodb_exporter",
-    pwd: "password_xxx_monitor",
+    pwd: "password_xxx_monitor_X1909",
     roles: [
         { role: "clusterMonitor", db: "admin" },
         { role: "read", db: "local" }

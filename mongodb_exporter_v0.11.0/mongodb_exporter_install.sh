@@ -1,21 +1,17 @@
 # install mongodb_exporter
 
 #
-#bind_ip=127.0.0.1,172.19.xx.xx
-#
-#auth=true
-#keyFile=/data/mongodb/qm_mongo.key
-#
 
 mkdir /usr/local/mongodb_exporter/ -p
 cd /usr/local/mongodb_exporter/ && wget https://raw.githubusercontent.com/0eff/prometheus_grafana/master/mongodb_exporter_v0.11.0/mongodb_exporter
+chmod +x /usr/local/mongodb_exporter/mongodb_exporter
 cat <<EOF  > /lib/systemd/system/mongodb_exporter.service
 [Unit]
 Description=mongodb exporter server
 After=network.target
 
 [Service]
-ExecStart=/usr/local/mongodb_exporter/mongodb_exporter --mongodb.uri=mongodb://mongodb_exporter:password@127.0.0.1:27017
+ExecStart=/usr/local/mongodb_exporter/mongodb_exporter --mongodb.uri=mongodb://mongodb_exporter:password_xxx_monitor_X1909@127.0.0.1:29017
 KillMode=process
 Restart=on-failure
 Type=simple

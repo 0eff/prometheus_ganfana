@@ -15,7 +15,7 @@ def getProcess(pName):
 
     return process_lst
 
-name_str="barad_agent,prometheus,node_exporter,grafana-server"
+name_str="java"
 
 #---------------cpu
 print '# TYPE process_cpu_percent gauge'
@@ -32,12 +32,13 @@ for name in name_str.split(','):
         t_list.append(p_cpu)
 
     p_memory = round(p.memory_percent(),3)
+    p_pid = ( p.pid )
 
     if(len(p_lst)==1):
       print 'process_cpu_percent{mode="%s"} %s'%(name,round(float(sum(t_list))/len(t_list),3))
     else:
       n=n+1
-      print 'process_cpu_percent{mode="%s_%s"} %s'%(name,n,round(float(sum(t_list))/len(t_list),3))
+      print 'process_cpu_percent{mode="%s_%s_%s"} %s'%(name,n,p_pid,round(float(sum(t_list))/len(t_list),3))
 
 #---------------memory
 print ''
@@ -51,9 +52,10 @@ for name in name_str.split(','):
   n=0
   for p in p_lst:
     p_memory = round(p.memory_percent(),3)
+    p_pid = ( p.pid )
 
     if(len(p_lst)==1):
       print 'process_memory_percent{mode="%s"} %s'%(name,p_memory)
     else:
       n=n+1
-      print 'process_memory_percent{mode="%s_%s"} %s'%(name,n,p_memory)
+      print 'process_memory_percent{mode="%s_%s_%s"} %s'%(name,n,p_pid,p_memory)
